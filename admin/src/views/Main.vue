@@ -3,16 +3,13 @@
   <el-container style="height: 100vh">
     <el-aside width="200px" style="background-color: rgb(238, 241, 246)">
       <!-- 在这里加一个router的属性然后再配置路由就可以实现能点击的效果 它会跳转到index指定的那个路由 -->
-      <el-menu router :default-openeds="['1', '3']">
+      <!-- :default-openeds="['3']"默认展开第三个，unique-opened一次只能展开一个 -->
+      <!-- :default-active="$route.path"默认高亮，也就是点击了哪个哪个变色，本来是有这功能的，但是刷新之后高亮消失，加这个就根据路由路径高亮 -->
+      <el-menu router unique-opened :default-active="$route.path">
         <el-submenu index="1">
           <template slot="title"
             ><i class="el-icon-message"></i>内容管理</template
           >
-          <el-menu-item-group>
-            <template slot="title">分类</template>
-            <el-menu-item index="/categories/create">新建分类</el-menu-item>
-            <el-menu-item index="/categories/list">分类列表</el-menu-item>
-          </el-menu-item-group>
           <el-menu-item-group>
             <template slot="title">物品</template>
             <el-menu-item index="/items/create">新建物品</el-menu-item>
@@ -28,10 +25,30 @@
             <el-menu-item index="/articles/create">新建文章</el-menu-item>
             <el-menu-item index="/articles/list">文章列表</el-menu-item>
           </el-menu-item-group>
+        </el-submenu>
+         <el-submenu index="2">
+          <template slot="title"
+            ><i class="el-icon-message"></i>运营管理</template
+          >
           <el-menu-item-group>
             <template slot="title">广告位</template>
             <el-menu-item index="/ads/create">新建广告位</el-menu-item>
             <el-menu-item index="/ads/list">广告位列表</el-menu-item>
+          </el-menu-item-group>
+        </el-submenu>
+         <el-submenu index="3">
+          <template slot="title"
+            ><i class="el-icon-message"></i>系统设置</template
+          >
+          <el-menu-item-group>
+            <template slot="title">分类</template>
+            <el-menu-item index="/categories/create">新建分类</el-menu-item>
+            <el-menu-item index="/categories/list">分类列表</el-menu-item>
+          </el-menu-item-group>
+          <el-menu-item-group>
+            <template slot="title">管理员</template>
+            <el-menu-item index="/admin_users/create">新建管理员</el-menu-item>
+            <el-menu-item index="/admin_users/list">管理员列表</el-menu-item>
           </el-menu-item-group>
         </el-submenu>
       </el-menu>

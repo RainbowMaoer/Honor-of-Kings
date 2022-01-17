@@ -22,7 +22,8 @@
             <!-- :before-upload="beforeAvatarUpload"上传之前做什么，比如图片大小上面合不合适，这里不用，先删掉 -->
             <el-upload
               class="avatar-uploader"
-              :action="$http.defaults.baseURL + '/upload'"
+              :action="uploadUrl"
+              :headers="getAuthHeaders()"
               :show-file-list="false"
               :on-success="afterUpload"
             >
@@ -122,7 +123,8 @@
               <el-form-item label="技能图标">
                 <el-upload
                   class="avatar-uploader"
-                  :action="$http.defaults.baseURL + '/upload'"
+                  :action="uploadUrl"
+                  :headers="getAuthHeaders()"
                   :show-file-list="false"
                   :on-success="res => $set(item, 'icon', res.url)"
                 >

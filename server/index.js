@@ -3,6 +3,11 @@ const express = require('express')
 // 再定义一个app,它是express的实例
 const app = express()
 
+// app.set表示在当前express实例上设置一个变量   这里的值按道理是应该放到环境里面去的，这里是为了方便学习，不搞那么复杂
+app.set('secret', '1e1edqwdq')
+
+
+
 // 这里是把这个跨域模块引进来,然后后面加一个小括号就是使用它的意思
 app.use(require('cors')())
 app.use(express.json())
