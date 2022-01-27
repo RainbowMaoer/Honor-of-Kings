@@ -1,0 +1,226 @@
+// 被包含的文件以下划线开头，但是引用的时候又不需要下划线
+@import './variables';
+// 样式重置reset
+* {
+  box-sizing: border-box;
+  // 选中之后高亮，可以理解为边框
+  outline: none;
+}
+
+html {
+  // 设定基本单位，rem用的比较多，那么rem就是html上设置的基本字体大小
+  // rem就是字节的意思，1rem就是一字节的大小
+  font-size: 13px;
+}
+
+body {
+  margin: 0;
+  // Arial是大多数电脑都有的字体，Helvetica是苹果上的字体
+  // sans-serif是非衬线字体，就是那种粗一点的文字，横竖什么的看起来一样粗
+  font-family: Arial, Helvetica, sans-serif;
+  line-height: 1.2em;
+  background: #f1f1f1;
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: #999;
+  text-decoration: none;
+}
+
+p {
+  line-height: 1.5em;
+}
+
+// 用each把上面colors循环出来
+@each $colorKey,
+$color in $colors {
+  .text-#{$colorKey} {
+    color: $color;
+  }
+
+  .bg-#{$colorKey} {
+    background-color: $color;
+  }
+}
+
+// text-align 文字位置
+// $后面第一个参数是变量，可以随便改名字，第二个表示一个集合可以是上面的$colors,也可以是自己在这写的一个直接量
+@each $var in (left, center, right) {
+
+  // 这里理解一下，它会自己相当于把text-left和其他两个类名循环出来
+  .text-#{$var} {
+    text-align: $var !important;
+  }
+}
+
+@each $sizeKey,
+$size in $font-sizes {
+  .fs-#{$sizeKey} {
+    font-size: $size * $base-font-size;
+  }
+}
+
+// text overflow
+.text-ellipsis {
+  display: inline-block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  // 不换行
+  white-space: nowrap;
+}
+
+// width height
+.w-100 {
+  width: 100%;
+}
+
+.h-100 {
+  height: 100%;
+}
+
+// flex布局相关
+.d-flex {
+  display: flex;
+}
+
+// 纵向排列
+.flex-column {
+  // 默认是水平的对齐方式，这个是改变成垂直的对齐方式
+  flex-direction: column;
+}
+// 换行
+.flex-wrap {
+  flex-wrap: wrap;
+}
+
+
+@each $key,
+$value in $flex-jc {
+  .jc-#{$key} {
+    justify-content: $value;
+  }
+}
+
+
+
+@each $key,
+$value in $flex-ai {
+  .ai-#{$key} {
+    align-items: $value;
+  }
+}
+
+// 这个是左边靠左，然后右边其他的均分，其实就是均分 这个是简写
+.flex-1 {
+  flex: 1;
+}
+
+// 这个是其中一种完整形式
+.flex-grow-1 {
+  flex-grow: 1
+}
+
+
+
+@each $typeKey,
+$type in $spacing-types {}
+
+
+
+
+@each $typeKey,
+$type in $spacing-types {
+
+  // 不带方位的
+  @each $sizeKey,
+  $size in $spacing-sizes {
+
+    // 这个样式是.m-1 {margin: 0.25rem;}
+    .#{$typeKey}-#{$sizeKey} {
+      #{$type}: $size * $spacing-base-size;
+    }
+  }
+
+  // 水平和垂直边距相等的
+  @each $sizeKey,
+  $size in $spacing-sizes {
+    .#{$typeKey}x-#{$sizeKey} {
+      #{$type}-left: $size * $spacing-base-size;
+      #{$type}-right: $size * $spacing-base-size;
+    }
+
+    .#{$typeKey}y-#{$sizeKey} {
+      #{$type}-top: $size * $spacing-base-size;
+      #{$type}-bottom: $size * $spacing-base-size;
+    }
+  }
+
+  @each $directionKey,
+  $direction in $spacing-directions {
+
+    @each $sizeKey,
+    $size in $spacing-sizes {
+
+      // 带方位的
+      // 想要这种形式 .mt-1 {margin-top: 0.25rem} 
+      .#{$typeKey}#{$directionKey}-#{$sizeKey} {
+        #{$type}-#{$direction}: $size * $spacing-base-size;
+      }
+    }
+  }
+}
+
+// button
+.btn {
+  border: none;
+  border-radius: 0.1538rem;
+  font-size: map-get($font-sizes, 'sm') * $base-font-size;
+  padding: 0.2rem 0.6rem;
+  &.btn-lg {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    i{
+      color: map-get($colors, 'primary');
+      font-weight: bold;
+      font-size: 1.5rem;
+      margin-right: 0.5rem;
+    }
+    background: map-get($colors, 'white-1');
+    border: 1px solid map-get($colors, 'white-2');
+    padding: 0.8rem 1rem;
+    font-size: 1rem;
+  }
+}
+
+// nav
+.nav {
+  // 默认就是横向排布
+  display: flex;
+  .nav-item {
+    border-bottom: 3px solid transparent;
+    padding-bottom: 0.2rem;
+
+    // 他们两不是父子级的关系，所以要加这个&符号
+    &.active {
+      color: map-get($colors, 'primary');
+      border-bottom-color: map-get($colors, 'primary');
+    }
+  }
+  &.nav-inverse {
+    .nav-item {
+      color: map-get($colors, 'white');
+      &.active {
+        border-bottom-color: map-get($colors, 'white');
+      }
+    }
+  }
+}
+
+// borders
+@each $dir in (top, right, bottom, left) {
+  .border-#{$dir} {
+    border-#{$dir}: 1px solid $border-color;
+  }
+}

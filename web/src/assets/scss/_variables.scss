@@ -1,0 +1,61 @@
+// 定义颜色colors
+// scss里面是可以用变量的
+$colors: ("primary": #db9e3f,
+  "info": #4b67af,
+  // 这个键有冲突的时候就引号引起来
+  "blue": #4394e4,
+  "blue-1": #1f3695,
+  "danger": #791a15,
+  "white": #fff,
+  "white-1": #fcfcfc,
+  "white-2": #eceef0,
+  "light": #f9f9f9,
+  "light-1": #d4d9de,
+  "grey": #999,
+  "grey-1": #666,
+  "dark-1": #343440,
+  "dark": #222,
+  "black": #000);
+
+$border-color: map-get($colors, 'light-1');
+
+  // 因为上面设置了网页基本的字体大小是13px，所以这里的1rem就是13px
+$base-font-size: 1rem;
+// font-size
+$font-sizes: (xxs: 0.6154,
+  xs: 0.7692, // 10px
+  sm: 0.9231, // 12px
+  md: 1, // 13px
+  lg: 1.0769, // 14px
+  xl: 1.2308 // 16px
+);
+
+// 主轴方向上的对齐方式
+$flex-jc: (start: flex-start,
+  end: flex-end,
+  center: center,
+  between: space-between,
+  around: space-around);
+
+  // 交叉轴对齐方式
+$flex-ai: (start: flex-start,
+end: flex-end,
+center: center,
+stretch: stretch);
+
+// spacing 边距
+// .mt-1  =>  margin-top  1级  .pb-2 => padding-bottom 2级别
+// 0-5几个级别，每个级别尺寸不一样  自己定义一下
+$spacing-types: (m: margin,
+  p: padding);
+$spacing-directions: (t: top,
+  r: right,
+  b: bottom,
+  l: left);
+$spacing-base-size: 1rem;
+$spacing-sizes: (0: 0,
+  1: 0.25,
+  2: 0.5,
+  3: 1,
+  4: 1.5,
+  5: 3);

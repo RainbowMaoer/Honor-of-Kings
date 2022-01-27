@@ -21,6 +21,7 @@ app.use('/uploads', express.static(__dirname + '/uploads'))
 require('./plugins/db')(app)
 // 引用过来之后是一个函数,所以要执行它并把函数传进去,这里就像一个匿名函数,闭包一样  这样在这个admin里面就有一个app可以用
 require('./routes/admin')(app)
+require('./routes/web')(app)
 
 // 在3000端口,同时传给它一个回调函数,里面表示启动之后做什么
 app.listen(3000, () => {

@@ -8,5 +8,12 @@ const schema = new mongoose.Schema({
   parent: { type: mongoose.SchemaTypes.ObjectId, ref: 'Category' }
 })
 
+schema.virtual('children', {
+  localField: '_id',
+  foreignField: 'parent',
+  justOne: false,
+  ref: 'Category'
+})
+
 // 导出的是mongoose的一个模型,哪里需要用到就哪里导入 比如admin里面的index.js
 module.exports = mongoose.model('Category', schema)

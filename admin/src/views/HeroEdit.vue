@@ -7,7 +7,7 @@
     <!-- @submit.native.prevent=""在这里的意思是,native表示原生的一个表单,prevent阻止默认提交,不要跳转页面 -->
     <el-form label-width="100px" @submit.native.prevent="save">
       <!-- 这个border-card可以改变样式,变得好看一点 -->
-      <el-tabs type="border-card" value="skills">
+      <el-tabs type="border-card" value="basic">
         <!-- 这个value和name相同就表示默认显示这个 -->
         <el-tab-pane label="基本信息" name="basic">
           <el-form-item label="名称">
@@ -29,6 +29,24 @@
             >
               <!-- 这里的判断意思是有图片地址就显示图片，没有图片地址就显示那个上传图标 -->
               <img v-if="model.avatar" :src="model.avatar" class="avatar" />
+              <!-- 这是上传图标 -->
+              <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+            </el-upload>
+          </el-form-item>
+
+          <el-form-item label="背景图">
+            <!-- 这里的action就是上传的接口地址 这里是动态绑定，所以是加 :  -->
+            <!-- :on-success="handleAvatarSuccess"是成功之后做什么 这里我们要做的是把它返回的值赋值给icon -->
+            <!-- :before-upload="beforeAvatarUpload"上传之前做什么，比如图片大小上面合不合适，这里不用，先删掉 -->
+            <el-upload
+              class="avatar-uploader"
+              :action="uploadUrl"
+              :headers="getAuthHeaders()"
+              :show-file-list="false"
+              :on-success="res => $set(model, 'banner', res.url)"
+            >
+              <!-- 这里的判断意思是有图片地址就显示图片，没有图片地址就显示那个上传图标 -->
+              <img v-if="model.banner" :src="model.banner" class="avatar" />
               <!-- 这是上传图标 -->
               <i v-else class="el-icon-plus avatar-uploader-icon"></i>
             </el-upload>
@@ -126,7 +144,7 @@
                   :action="uploadUrl"
                   :headers="getAuthHeaders()"
                   :show-file-list="false"
-                  :on-success="res => $set(item, 'icon', res.url)"
+                  :on-success="(res) => $set(item, 'icon', res.url)"
                 >
                   <!-- 这里的判断意思是有图片地址就显示图片，没有图片地址就显示那个上传图标 -->
                   <img v-if="item.icon" :src="item.icon" class="avatar" />
@@ -142,7 +160,46 @@
               </el-form-item>
               <el-form-item>
                 <!-- 第i个位置,删除一个 -->
-                <el-button size="small" type="danger" @click="model.skills.splice(i, 1)">删除</el-button>
+                <el-button
+                  size="small"
+                  type="danger"
+                  @click="model.skills.splice(i, 1)"
+                  >删除</el-button
+                >
+              </el-form-item>
+            </el-col>
+          </el-row>
+        </el-tab-pane>
+        <el-tab-pane label="最佳搭档" name="partners">
+          <el-button size="small" @click="model.partners.push({})"
+            ><i class="el-icon-plus"></i>添加搭档</el-button
+          >
+          <!-- 显示为flex布局  el-row定义行  el-col定义列-->
+          <el-row type="flex" style="flex-wrap: wrap">
+            <!-- 这里面的属性我用过,软件工程实践的时候,就是响应式 随着屏幕宽度改变而改变布局 -->
+            <el-col :md="12" v-for="(item, i) in model.partners" :key="i">
+              <el-form-item label="搭档名称">
+                <!-- filterable这个属性是可以在下拉菜单里面搜索 -->
+                <el-select filterable v-model="item.hero">
+                  <el-option
+                    v-for="hero in heroes"
+                    :key="hero._id"
+                    :value="hero._id"
+                    :label="hero.name"
+                  ></el-option>
+                </el-select>
+              </el-form-item>
+              <el-form-item label="搭档描述">
+                <el-input type="textarea" v-model="item.description"></el-input>
+              </el-form-item>
+              <el-form-item>
+                <!-- 第i个位置,删除一个 -->
+                <el-button
+                  size="small"
+                  type="danger"
+                  @click="model.partners.splice(i, 1)"
+                  >删除</el-button
+                >
               </el-form-item>
             </el-col>
           </el-row>
@@ -165,6 +222,7 @@ export default {
     return {
       categories: [],
       items: [],
+      heroes: [],
       model: {
         name: "",
         avatar: "",
@@ -175,6 +233,7 @@ export default {
           survive: 0,
         },
         skills: [],
+        partners: [],
       },
     };
   },
@@ -227,10 +286,16 @@ export default {
       // 这里我们只需要英雄分类,到时候我们会处理一下
       this.items = res.data;
     },
+    async fetchHeroes() {
+      const res = await this.$http.get(`rest/heroes`);
+      // 这里我们只需要英雄分类,到时候我们会处理一下
+      this.heroes = res.data;
+    },
   },
   created() {
     this.fetchCategories();
     this.fetchItems();
+    this.fetchHeroes();
     // 这里要执行一个方法去获取数据,就是当点了编辑按钮之后返回到编辑页面,之前对应的数据就会出现在框框里面
     // 当然这个获取数据的方法需要判断一下,如果有了this.id才执行,没有就不执行
     this.id && this.fetch();
@@ -259,7 +324,7 @@ i.avatar-uploader-icon {
   text-align: center;
 }
 .avatar {
-  width: 5rem;
+  /* width: 5rem; */
   height: 5rem;
   display: block;
 }

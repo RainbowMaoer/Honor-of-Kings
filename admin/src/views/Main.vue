@@ -69,7 +69,7 @@
 
       <el-main>
         <!-- 不是固定写死的，需要路由跳转的相应页面 而应该是一个路由容器 -->
-        <router-view></router-view>
+        <router-view :key="$route.path"></router-view>
         <!-- <el-table :data="tableData">
           <el-table-column prop="date" label="日期" width="140">
           </el-table-column>
